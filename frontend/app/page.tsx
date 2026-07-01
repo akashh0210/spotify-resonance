@@ -2,24 +2,40 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search } from 'lucide-react'
+import { Search, Loader2 } from 'lucide-react'
 import IntentInput from '@/components/IntentInput'
 import NoveltySlider from '@/components/NoveltySlider'
 import ExamplePrompts from '@/components/ExamplePrompts'
 import ExplainerCards from '@/components/ExplainerCards'
+import SkeletonCards from '@/components/SkeletonCards'
+import { fetchDiscovery } from '@/lib/api'
 
 export default function DiscoverPage() {
   const router = useRouter()
   const [intent, setIntent] = useState('')
   const [noveltyLevel, setNoveltyLevel] = useState(3)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleDiscover = () => {
-    if (!intent.trim()) return
-    const params = new URLSearchParams({
-      intent: intent.trim(),
-      novelty_level: String(noveltyLevel),
-    })
-    router.push(`/results?${params.toString()}`)
+  const handleDiscover = async () => {
+    if (!intent.trim() || loading) return
+    setLoading(true)
+    setError(null)
+    try {
+      const data = await fetchDiscovery(intent.trim(), noveltyLevel)
+      sessionStorage.setItem('lastDiscovery', JSON.stringify(data))
+      router.push('/results')
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : ''
+      if (msg.includes('fetch') || msg.includes('NetworkError') || msg.includes('Failed to fetch'))
+        setError('Discovery service is warming up — try again in 30 seconds.')
+      else if (msg.includes('429'))
+        setError('Too many discoveries — wait a moment and try again.')
+      else
+        setError('Something went wrong. Try rephrasing your mood.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -54,7 +70,7 @@ export default function DiscoverPage() {
         {/* Discover button */}
         <button
           onClick={handleDiscover}
-          disabled={!intent.trim()}
+          disabled={!intent.trim() || loading}
           className="
             w-full flex items-center justify-center gap-2
             py-4 rounded-full font-bold text-base
@@ -64,17 +80,43 @@ export default function DiscoverPage() {
             transition-colors
           "
         >
-          <Search size={18} />
-          Discover
+          {loading ? (
+            <>
+              <Loader2 size={18} className="animate-spin" />
+              Discovering...
+            </>
+          ) : (
+            <>
+              <Search size={18} />
+              Discover
+            </>
+          )}
         </button>
 
-        {/* Explainer cards */}
-        <div className="mt-12">
-          <p className="text-text-subdued text-xs mb-4 uppercase tracking-wider font-medium">
-            Why Resonance?
-          </p>
-          <ExplainerCards />
-        </div>
+        {/* Error */}
+        {error && (
+          <p className="mt-4 text-sm text-red-400 text-center">{error}</p>
+        )}
+
+        {/* Skeleton preview while loading */}
+        {loading && (
+          <div className="mt-10">
+            <p className="text-text-subdued text-xs mb-4 text-center animate-pulse">
+              Reasoning about your mood...
+            </p>
+            <SkeletonCards />
+          </div>
+        )}
+
+        {/* Explainer cards (hide while loading to keep focus) */}
+        {!loading && (
+          <div className="mt-12">
+            <p className="text-text-subdued text-xs mb-4 uppercase tracking-wider font-medium">
+              Why Resonance?
+            </p>
+            <ExplainerCards />
+          </div>
+        )}
       </div>
     </div>
   )

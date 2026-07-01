@@ -1,9 +1,9 @@
 'use client'
 
+import { useRef, useState } from 'react'
 import Image from 'next/image'
-import { ExternalLink } from 'lucide-react'
-
-type NoveltyTag = 'comfort' | 'familiar_plus' | 'balanced' | 'exploratory' | 'adventurous'
+import { ExternalLink, Play, Pause } from 'lucide-react'
+import type { NoveltyTag } from '@/lib/api'
 
 interface TrackCardProps {
   track_name: string
@@ -11,9 +11,11 @@ interface TrackCardProps {
   album: string | null
   album_art: string | null
   spotify_url: string | null
+  preview_url: string | null
   explanation: string
   novelty_tag: NoveltyTag
   spotify_found?: boolean
+  resolved_via?: string
 }
 
 const TAG_STYLES: Record<NoveltyTag, string> = {
@@ -38,14 +40,32 @@ export default function TrackCard({
   album,
   album_art,
   spotify_url,
+  preview_url,
   explanation,
   novelty_tag,
   spotify_found = true,
 }: TrackCardProps) {
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  const togglePreview = () => {
+    if (!audioRef.current) return
+    if (isPlaying) {
+      audioRef.current.pause()
+      setIsPlaying(false)
+    } else {
+      audioRef.current.play()
+      setIsPlaying(true)
+    }
+  }
+
+  const tag = TAG_STYLES[novelty_tag] ?? TAG_STYLES.balanced
+  const label = TAG_LABELS[novelty_tag] ?? novelty_tag
+
   return (
-    <div className="bg-bg-card rounded-lg p-4 flex gap-4 hover:bg-bg-card-hover transition-colors group">
+    <div className="bg-bg-card rounded-lg p-4 flex gap-4 hover:-translate-y-1 hover:shadow-xl transition-all duration-200 group">
       {/* Album art */}
-      <div className="flex-shrink-0 w-[120px] h-[120px] rounded-md overflow-hidden bg-bg-elevated">
+      <div className="flex-shrink-0 w-[120px] h-[120px] rounded shadow-md overflow-hidden bg-bg-elevated">
         {album_art ? (
           <Image
             src={album_art}
@@ -53,6 +73,7 @@ export default function TrackCard({
             width={120}
             height={120}
             className="w-full h-full object-cover"
+            unoptimized
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -73,20 +94,18 @@ export default function TrackCard({
               <p className="text-text-subdued text-xs mt-0.5 truncate">{album}</p>
             )}
           </div>
-          <span
-            className={`flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-medium ${TAG_STYLES[novelty_tag] || TAG_STYLES.balanced}`}
-          >
-            {TAG_LABELS[novelty_tag] || novelty_tag}
+          <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-medium ${tag}`}>
+            {label}
           </span>
         </div>
 
-        {/* Explanation — the core differentiator */}
+        {/* Explanation */}
         <p className="text-text-secondary text-xs leading-relaxed mt-2 flex-1">
           {explanation}
         </p>
 
-        {/* Play button */}
-        <div className="mt-3">
+        {/* Actions */}
+        <div className="mt-3 flex items-center gap-2 flex-wrap">
           {spotify_url ? (
             <a
               href={spotify_url}
@@ -94,14 +113,31 @@ export default function TrackCard({
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-accent text-accent text-xs font-medium hover:bg-accent hover:text-black transition-colors"
             >
-              <ExternalLink size={12} />
+              <ExternalLink size={11} />
               Play on Spotify
             </a>
           ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border-spotify text-text-subdued text-xs font-medium cursor-not-allowed">
-              <ExternalLink size={12} />
-              {spotify_found ? 'Play on Spotify' : 'Not found on Spotify'}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border-spotify text-text-subdued text-xs font-medium">
+              {spotify_found ? 'Play on Spotify' : 'Not on Spotify'}
             </span>
+          )}
+
+          {preview_url && (
+            <>
+              <button
+                onClick={togglePreview}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-bg-elevated text-text-secondary text-xs font-medium hover:bg-bg-card-hover hover:text-text-primary transition-colors"
+              >
+                {isPlaying ? <Pause size={11} /> : <Play size={11} />}
+                {isPlaying ? 'Pause' : '30s Preview'}
+              </button>
+              <audio
+                ref={audioRef}
+                src={preview_url}
+                onEnded={() => setIsPlaying(false)}
+                preload="none"
+              />
+            </>
           )}
         </div>
       </div>

@@ -21,6 +21,7 @@ class TrackOut(BaseModel):
     explanation: str
     novelty_tag: str
     spotify_found: bool = True
+    resolved_via: str = "none"
 
 
 class DiscoverResponse(BaseModel):
@@ -39,7 +40,7 @@ def discover(req: DiscoverRequest) -> DiscoverResponse:
     try:
         enriched = merge.enrich_tracks(raw_tracks)
     except Exception as exc:
-        raise HTTPException(status_code=502, detail=f"Spotify error: {exc}") from exc
+        raise HTTPException(status_code=502, detail=f"Enrichment error: {exc}") from exc
 
     tracks = [TrackOut(**t) for t in enriched]
     return DiscoverResponse(
