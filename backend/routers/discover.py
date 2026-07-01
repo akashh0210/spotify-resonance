@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from backend.services import llm
+from backend.services import llm, merge
 
 router = APIRouter()
 
@@ -14,9 +14,13 @@ class DiscoverRequest(BaseModel):
 class TrackOut(BaseModel):
     track_name: str
     artist: str
-    search_query: str
+    album: str | None = None
+    album_art: str | None = None
+    spotify_url: str | None = None
+    preview_url: str | None = None
     explanation: str
     novelty_tag: str
+    spotify_found: bool = True
 
 
 class DiscoverResponse(BaseModel):
@@ -32,7 +36,12 @@ def discover(req: DiscoverRequest) -> DiscoverResponse:
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"LLM error: {exc}") from exc
 
-    tracks = [TrackOut(**t) for t in raw_tracks]
+    try:
+        enriched = merge.enrich_tracks(raw_tracks)
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Spotify error: {exc}") from exc
+
+    tracks = [TrackOut(**t) for t in enriched]
     return DiscoverResponse(
         intent=req.intent,
         novelty_level=req.novelty_level,
