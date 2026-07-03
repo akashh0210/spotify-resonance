@@ -1,0 +1,38 @@
+version: "3.9"
+
+# -----------------------------------------------------------------------
+# Local development: run both services together.
+# Production: backend → Render Web Service, keep_warm → Render Background Worker.
+# -----------------------------------------------------------------------
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+    env_file:
+      - .env.local
+    restart: unless-stopped
+
+  keep-warm:
+    build:
+      context: ./keep_warm
+    environment:
+      - TARGET_URLS=http://backend:8000/health   # internal network in Compose
+      - PING_INTERVAL_SECONDS=600
+      - JITTER_SECONDS=120
+      - LOG_LEVEL=INFO
+    # No ports — this is a headless background process.
+    depends_on:
+      - backend
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.05"      # ~3 CPU-seconds per minute max
+          memory: 64M       # httpx + APScheduler comfortably under 40 MB
