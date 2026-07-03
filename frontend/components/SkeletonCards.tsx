@@ -4,19 +4,19 @@ export default function SkeletonCards() {
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className="bg-bg-card rounded-lg p-4 flex gap-4 animate-pulse"
+          className="bg-bg-card rounded-lg overflow-hidden flex flex-row md:flex-col"
         >
           {/* Art placeholder */}
-          <div className="flex-shrink-0 w-[120px] h-[120px] rounded-md bg-bg-elevated" />
+          <div className="shimmer flex-shrink-0 w-[110px] h-[110px] md:w-full md:h-[160px] rounded-l-lg md:rounded-l-none md:rounded-t-lg" />
 
           {/* Text placeholders */}
-          <div className="flex flex-col gap-2 flex-1 py-1">
-            <div className="h-3 bg-bg-elevated rounded w-3/4" />
-            <div className="h-2 bg-bg-elevated rounded w-1/2" />
-            <div className="h-2 bg-bg-elevated rounded w-2/3 mt-2" />
-            <div className="h-2 bg-bg-elevated rounded w-full" />
-            <div className="h-2 bg-bg-elevated rounded w-5/6" />
-            <div className="h-6 bg-bg-elevated rounded-full w-28 mt-2" />
+          <div className="flex flex-col gap-2.5 flex-1 p-3 md:p-4 justify-center">
+            <div className="shimmer h-3 rounded w-3/4" />
+            <div className="shimmer h-2.5 rounded w-1/2" />
+            <div className="shimmer h-2 rounded w-full mt-1" />
+            <div className="shimmer h-2 rounded w-5/6" />
+            <div className="shimmer h-2 rounded w-4/6" />
+            <div className="shimmer h-6 rounded-full w-28 mt-1" />
           </div>
         </div>
       ))}

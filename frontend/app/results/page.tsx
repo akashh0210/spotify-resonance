@@ -22,11 +22,8 @@ export default function ResultsPage() {
   useEffect(() => {
     const raw = sessionStorage.getItem('lastDiscovery')
     if (raw) {
-      try {
-        setData(JSON.parse(raw))
-      } catch {
-        setNoData(true)
-      }
+      try { setData(JSON.parse(raw)) }
+      catch { setNoData(true) }
     } else {
       setNoData(true)
     }
@@ -39,7 +36,7 @@ export default function ResultsPage() {
           No results found — go back and discover something.
         </p>
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/discover')}
           className="px-6 py-3 rounded-full font-semibold text-sm border border-border-spotify text-text-secondary hover:text-text-primary hover:bg-bg-card-hover transition-colors"
         >
           Back to Discovery
@@ -57,21 +54,20 @@ export default function ResultsPage() {
   }
 
   const noveltyLabel = NOVELTY_LABELS[data.novelty_level] || 'Balanced'
-  const displayIntent =
-    data.intent.length > 60 ? data.intent.slice(0, 60) + '…' : data.intent
+  const displayIntent = data.intent.length > 60 ? data.intent.slice(0, 60) + '…' : data.intent
 
   return (
-    <div className="px-6 py-10">
+    <div className="px-4 md:px-6 py-10 fade-in">
       <div className="max-w-5xl mx-auto">
+
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-1">
-            8 picks for:{' '}
-            <span className="text-accent">"{displayIntent}"</span>
-          </h1>
-          <p className="text-text-secondary text-sm">
-            Novelty: {noveltyLabel} · Powered by 5,708 review voices
+          <p className="text-[13px] uppercase tracking-[1px] text-text-subdued font-medium mb-2">
+            Novelty: {noveltyLabel} · 5,708 review voices
           </p>
+          <h1 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+            8 picks for: <span className="text-accent">"{displayIntent}"</span>
+          </h1>
         </div>
 
         {/* Track grid */}
@@ -84,31 +80,23 @@ export default function ResultsPage() {
           ))}
         </div>
 
-        {/* Bottom actions */}
+        {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             disabled
-            title="Spotify login required — coming in Phase 5"
-            className="px-6 py-3 rounded-full font-semibold text-sm bg-accent text-black opacity-40 cursor-not-allowed"
+            title="Spotify login required — planned for Phase 6"
+            className="px-6 py-3 rounded-full font-semibold text-sm bg-accent text-black opacity-30 cursor-not-allowed"
           >
             Save as Playlist
           </button>
           <button
-            onClick={() => router.push('/')}
-            className="px-6 py-3 rounded-full font-semibold text-sm border border-border-spotify text-text-secondary hover:text-text-primary hover:bg-bg-card-hover transition-colors"
+            onClick={() => router.push('/discover')}
+            className="px-6 py-3 rounded-full font-semibold text-sm border border-[#B3B3B3] text-white hover:border-white transition-colors"
           >
             Try Different Mood
           </button>
           <button
-            onClick={() => {
-              if (data) {
-                const params = new URLSearchParams({
-                  intent: data.intent,
-                  novelty_level: String(data.novelty_level),
-                })
-                router.push(`/?${params.toString()}`)
-              }
-            }}
+            onClick={() => router.push('/discover')}
             className="px-6 py-3 rounded-full font-semibold text-sm border border-border-spotify text-text-secondary hover:text-text-primary hover:bg-bg-card-hover transition-colors"
           >
             Adjust Novelty

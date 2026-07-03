@@ -14,11 +14,12 @@ export default function IntentInput({ value, onChange }: IntentInputProps) {
       rows={3}
       className="
         w-full resize-none rounded-lg p-4
-        bg-bg-card border border-border-spotify
-        text-text-primary placeholder-text-subdued
-        text-sm leading-relaxed
-        focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent
-        transition-colors
+        bg-[#282828] border-2 border-transparent
+        text-white placeholder-[#6A6A6A]
+        text-base leading-relaxed
+        focus:outline-none focus:border-accent
+        focus:shadow-[0_0_0_3px_rgba(29,185,84,0.18)]
+        transition-all duration-150
       "
     />
   )

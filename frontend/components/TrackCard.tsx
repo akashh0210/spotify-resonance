@@ -18,20 +18,12 @@ interface TrackCardProps {
   resolved_via?: string
 }
 
-const TAG_STYLES: Record<NoveltyTag, string> = {
-  comfort: 'bg-accent/20 text-accent',
-  familiar_plus: 'bg-teal-500/20 text-teal-400',
-  balanced: 'bg-yellow-500/20 text-yellow-400',
-  exploratory: 'bg-orange-500/20 text-orange-400',
-  adventurous: 'bg-red-500/20 text-red-400',
-}
-
-const TAG_LABELS: Record<NoveltyTag, string> = {
-  comfort: 'Comfort',
-  familiar_plus: 'Familiar+',
-  balanced: 'Balanced',
-  exploratory: 'Exploratory',
-  adventurous: 'Adventurous',
+const PILL: Record<NoveltyTag, { bg: string; color: string; label: string }> = {
+  comfort:      { bg: 'rgba(29,185,84,0.15)',   color: '#1DB954', label: 'Comfort'     },
+  familiar_plus:{ bg: 'rgba(78,204,163,0.15)',  color: '#4ECCA3', label: 'Familiar+'   },
+  balanced:     { bg: 'rgba(242,201,76,0.15)',  color: '#F2C94C', label: 'Balanced'    },
+  exploratory:  { bg: 'rgba(242,153,74,0.15)',  color: '#F2994A', label: 'Exploratory' },
+  adventurous:  { bg: 'rgba(235,87,87,0.15)',   color: '#EB5757', label: 'Adventurous' },
 }
 
 export default function TrackCard({
@@ -59,48 +51,52 @@ export default function TrackCard({
     }
   }
 
-  const tag = TAG_STYLES[novelty_tag] ?? TAG_STYLES.balanced
-  const label = TAG_LABELS[novelty_tag] ?? novelty_tag
+  const pill = PILL[novelty_tag] ?? PILL.balanced
 
   return (
-    <div className="bg-bg-card rounded-lg p-4 flex gap-4 hover:-translate-y-1 hover:shadow-xl transition-all duration-200 group">
-      {/* Album art */}
-      <div className="flex-shrink-0 w-[120px] h-[120px] rounded shadow-md overflow-hidden bg-bg-elevated">
+    <div className="bg-bg-card rounded-lg overflow-hidden flex flex-row md:flex-col hover:-translate-y-[3px] hover:bg-[#282828] hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-200 group">
+
+      {/* Album art — 120px on mobile (row), 160px on desktop (col) */}
+      <div className="relative flex-shrink-0 w-[110px] h-[110px] md:w-full md:h-[160px] overflow-hidden rounded-l-lg md:rounded-l-none md:rounded-t-lg">
         {album_art ? (
           <Image
             src={album_art}
             alt={`${track_name} album art`}
-            width={120}
-            height={120}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
             unoptimized
+            sizes="(max-width: 768px) 110px, 300px"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
+          <div className="w-full h-full bg-[#282828] flex items-center justify-center">
             <span className="text-3xl">🎵</span>
           </div>
         )}
       </div>
 
-      {/* Info */}
-      <div className="flex flex-col flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <div className="min-w-0">
-            <h3 className="text-text-primary font-semibold text-sm leading-tight truncate">
+      {/* Content */}
+      <div className="flex flex-col flex-1 min-w-0 p-3 md:p-4">
+        {/* Title row */}
+        <div className="flex items-start justify-between gap-2 mb-1.5">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-white font-semibold text-[15px] md:text-base leading-tight truncate">
               {track_name}
             </h3>
-            <p className="text-text-secondary text-xs mt-0.5 truncate">{artist}</p>
+            <p className="text-text-secondary text-sm mt-0.5 truncate">{artist}</p>
             {album && (
               <p className="text-text-subdued text-xs mt-0.5 truncate">{album}</p>
             )}
           </div>
-          <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-medium ${tag}`}>
-            {label}
+          <span
+            className="flex-shrink-0 text-[10px] md:text-[11px] uppercase tracking-[1px] font-medium px-2 py-0.5 rounded-full"
+            style={{ backgroundColor: pill.bg, color: pill.color }}
+          >
+            {pill.label}
           </span>
         </div>
 
-        {/* Explanation */}
-        <p className="text-text-secondary text-xs leading-relaxed mt-2 flex-1">
+        {/* Explanation — full text, no truncation */}
+        <p className="text-text-secondary text-[13px] md:text-sm leading-relaxed flex-1 mt-1">
           {explanation}
         </p>
 
@@ -111,13 +107,13 @@ export default function TrackCard({
               href={spotify_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-accent text-accent text-xs font-medium hover:bg-accent hover:text-black transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-accent text-accent text-[12px] font-medium hover:bg-accent hover:text-black transition-colors"
             >
               <ExternalLink size={11} />
               Play on Spotify
             </a>
           ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border-spotify text-text-subdued text-xs font-medium">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full border border-border-spotify text-text-subdued text-[12px] font-medium">
               {spotify_found ? 'Play on Spotify' : 'Not on Spotify'}
             </span>
           )}
@@ -126,7 +122,7 @@ export default function TrackCard({
             <>
               <button
                 onClick={togglePreview}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-bg-elevated text-text-secondary text-xs font-medium hover:bg-bg-card-hover hover:text-text-primary transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#282828] text-text-secondary text-[12px] font-medium hover:bg-[#3E3E3E] hover:text-white transition-colors"
               >
                 {isPlaying ? <Pause size={11} /> : <Play size={11} />}
                 {isPlaying ? 'Pause' : '30s Preview'}

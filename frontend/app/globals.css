@@ -4,19 +4,24 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #121212;
-  --bg-card: #181818;
+  --bg-primary:    #121212;
+  --bg-card:       #181818;
   --bg-card-hover: #282828;
-  --bg-elevated: #242424;
-  --accent: #1DB954;
-  --accent-hover: #1ED760;
-  --text-primary: #FFFFFF;
-  --text-secondary: #B3B3B3;
-  --text-subdued: #6A6A6A;
-  --border: #282828;
+  --bg-elevated:   #242424;
+  --accent:        #1DB954;
+  --accent-hover:  #1ED760;
+  --text-primary:  #FFFFFF;
+  --text-secondary:#B3B3B3;
+  --text-subdued:  #6A6A6A;
+  --border:        #282828;
 }
 
-html,
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+  background-color: #121212;
+}
+
 body {
   height: 100%;
   background-color: #121212;
@@ -26,7 +31,41 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-::-webkit-scrollbar { width: 8px; }
+/* ── scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #535353; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: #535353; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #727272; }
+
+/* ── equalizer / waveform animation ──────────────────────── */
+@keyframes waveform {
+  0%, 100% { transform: scaleY(0.25); opacity: 0.5; }
+  50%       { transform: scaleY(1);   opacity: 1;   }
+}
+
+/* ── skeleton shimmer ─────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #181818 0%,
+    #282828 40%,
+    #323232 50%,
+    #282828 60%,
+    #181818 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* ── fade-in on page mount ───────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+.fade-in {
+  animation: fadeIn 0.25s ease-out both;
+}

@@ -17,6 +17,7 @@ export default function ExamplePrompts({ onSelect }: ExamplePromptsProps) {
         <button
           key={prompt}
           onClick={() => onSelect(prompt)}
+          title="Click to try this prompt"
           className="
             px-4 py-2 rounded-full text-sm
             border border-border-spotify text-text-secondary
