@@ -3,7 +3,7 @@ import time
 
 import httpx
 
-from backend.config import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
+from config import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
 
 _TOKEN_URL = "https://accounts.spotify.com/api/token"
 _SEARCH_URL = "https://api.spotify.com/v1/search"

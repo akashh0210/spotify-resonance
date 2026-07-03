@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from backend.services import llm, merge
+from services import llm, merge
 
 router = APIRouter()
 

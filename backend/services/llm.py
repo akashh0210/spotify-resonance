@@ -3,7 +3,7 @@ import os
 from google import genai
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
-from backend.config import GEMINI_API_KEY, GEMINI_MODEL, GEMINI_TEMPERATURE
+from config import GEMINI_API_KEY, GEMINI_MODEL, GEMINI_TEMPERATURE
 
 SYSTEM_PROMPT = """You are Resonance, a music discovery agent. You are informed by
 analysis of 5,708 real Spotify user reviews from the Google Play Store,

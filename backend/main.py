@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.config import CORS_ORIGINS
-from backend.routers import discover
+from config import CORS_ORIGINS
+from routers import discover
 
 app = FastAPI(title="Resonance API")
 

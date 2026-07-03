@@ -59,11 +59,11 @@ User intent + novelty level
 
 | Phase | Description | Status | Notes |
 |-------|-------------|--------|-------|
-| 1 | Backend core (FastAPI + Gemini LLM) | PENDING | |
-| 2 | Spotify Search integration | PENDING | |
-| 3 | Frontend shell (Next.js Spotify replica) | PENDING | |
-| 4 | Polish + OAuth + playlist creation | PENDING | |
-| 5 | Deploy (Vercel + Render) + iterate | PENDING | |
+| 1 | Backend core (FastAPI + Gemini LLM) | ✅ DONE | |
+| 2 | Spotify Search integration | ✅ DONE | iTunes fallback active; Spotify when creds present |
+| 3 | Frontend shell (Next.js Spotify replica) | ✅ DONE | |
+| 4 | Polish + live API connection | ✅ DONE | Skeleton loading, 30s preview, hover lift, sessionStorage |
+| 5 | Deploy (Vercel + Render) | 🔄 IN PROGRESS | |
 
 ## Phase 1 — Backend Core
 
@@ -166,13 +166,18 @@ see 8 track cards with album art and explanations. Looks like Spotify.
 ## Phase 5 — Deploy + Iterate
 
 **Backend deploy (Render):**
-- Procfile: `web: uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
-- Environment variables: GEMINI_API_KEY, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
-- CORS allowed origins: Vercel frontend URL
+- Root Directory: `backend` (Render CWD = `backend/`)
+- Build Command: `pip install -r requirements.txt`
+- Procfile: `web: uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Environment variables:
+  - `GEMINI_API_KEY` — required
+  - `FRONTEND_URL` — set to Vercel URL (e.g. `https://spotify-resonance.vercel.app`)
+  - `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` — optional (iTunes fallback if blank)
 
 **Frontend deploy (Vercel):**
-- Connect GitHub repo, set root directory to `frontend/`
-- Environment variable: NEXT_PUBLIC_API_URL = Render backend URL
+- Root Directory: `frontend/`
+- Build Command: `npm run build` (auto-detected)
+- Environment variable: `NEXT_PUBLIC_API_URL` = Render backend URL
 
 **Post-deploy checklist:**
 - [ ] Both URLs load without errors

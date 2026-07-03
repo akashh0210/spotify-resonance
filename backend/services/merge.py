@@ -1,8 +1,8 @@
-from backend.config import USE_SPOTIFY
-from backend.services import itunes
+from config import USE_SPOTIFY
+from services import itunes
 
 if USE_SPOTIFY:
-    from backend.services import spotify
+    from services import spotify
 
 
 def enrich_tracks(llm_tracks: list[dict]) -> list[dict]:
