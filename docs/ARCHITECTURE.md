@@ -63,7 +63,7 @@ User intent + novelty level
 | 2 | Spotify Search integration | ✅ DONE | iTunes fallback active; Spotify when creds present |
 | 3 | Frontend shell (Next.js Spotify replica) | ✅ DONE | |
 | 4 | Polish + live API connection | ✅ DONE | Skeleton loading, 30s preview, hover lift, sessionStorage |
-| 5 | Deploy (Vercel + Render) | 🔄 IN PROGRESS | |
+| 5 | Deploy (Vercel + Render) | ✅ DONE | vercel.app + onrender.com live |
 
 ## Phase 1 — Backend Core
 
@@ -166,18 +166,20 @@ see 8 track cards with album art and explanations. Looks like Spotify.
 ## Phase 5 — Deploy + Iterate
 
 **Backend deploy (Render):**
+- URL: https://spotify-resonance.onrender.com
 - Root Directory: `backend` (Render CWD = `backend/`)
 - Build Command: `pip install -r requirements.txt`
 - Procfile: `web: uvicorn main:app --host 0.0.0.0 --port $PORT`
 - Environment variables:
   - `GEMINI_API_KEY` — required
-  - `FRONTEND_URL` — set to Vercel URL (e.g. `https://spotify-resonance.vercel.app`)
+  - `FRONTEND_URL=https://spotify-resonance.vercel.app` — for CORS
   - `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` — optional (iTunes fallback if blank)
 
 **Frontend deploy (Vercel):**
+- URL: https://spotify-resonance.vercel.app
 - Root Directory: `frontend/`
 - Build Command: `npm run build` (auto-detected)
-- Environment variable: `NEXT_PUBLIC_API_URL` = Render backend URL
+- Environment variable: `NEXT_PUBLIC_API_URL=https://spotify-resonance.onrender.com`
 
 **Post-deploy checklist:**
 - [ ] Both URLs load without errors
