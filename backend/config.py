@@ -10,7 +10,12 @@ GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL: str = "gemini-2.5-flash"
 GEMINI_TEMPERATURE: float = 0.7
 FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3001")
-CORS_ORIGINS: list[str] = list({FRONTEND_URL, "http://localhost:3000", "http://localhost:3001"})
+CORS_ORIGINS: list[str] = list({
+    FRONTEND_URL,
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://spotify-resonance.vercel.app",   # production Vercel URL
+})
 
 SPOTIFY_CLIENT_ID: str | None = os.getenv("SPOTIFY_CLIENT_ID") or None
 SPOTIFY_CLIENT_SECRET: str | None = os.getenv("SPOTIFY_CLIENT_SECRET") or None
