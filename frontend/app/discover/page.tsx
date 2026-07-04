@@ -38,14 +38,23 @@ export default function DiscoverPage() {
   }
 
   return (
-    <div className="min-h-full px-6 py-14 fade-in">
+    <div className="min-h-full px-6 py-10 fade-in">
       <div className="max-w-2xl mx-auto">
+
+        {/* NEW FEATURE badge */}
+        <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-[#1DB954]/10 border border-[#1DB954]/25">
+          <span className="w-2 h-2 rounded-full bg-[#1DB954] animate-pulse flex-shrink-0" />
+          <span className="text-[#1DB954] text-sm font-semibold">NEW FEATURE: Resonance</span>
+          <span className="text-[#B3B3B3] text-sm hidden sm:inline">
+            — describe your mood, get explained recommendations
+          </span>
+        </div>
 
         {/* Header */}
         <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-3">
           What are you in the mood to discover?
         </h1>
-        <p className="text-text-secondary text-base mb-8 leading-relaxed">
+        <p className="text-[#B3B3B3] text-base mb-8 leading-relaxed">
           Describe what you want — your words steer the discovery. The more specific, the better.
         </p>
 
@@ -56,14 +65,14 @@ export default function DiscoverPage() {
 
         {/* Example prompts */}
         <div className="mb-8">
-          <p className="text-[13px] uppercase tracking-[1px] text-text-subdued font-medium mb-3">
+          <p className="text-[13px] uppercase tracking-[1px] text-[#6A6A6A] font-medium mb-3">
             Try an example
           </p>
           <ExamplePrompts onSelect={setIntent} />
         </div>
 
         {/* Novelty slider */}
-        <div className="bg-bg-card rounded-lg p-6 mb-8">
+        <div className="bg-[#181818] rounded-lg p-6 mb-8">
           <NoveltySlider value={noveltyLevel} onChange={setNoveltyLevel} />
         </div>
 
@@ -71,14 +80,7 @@ export default function DiscoverPage() {
         <button
           onClick={handleDiscover}
           disabled={!intent.trim() || loading}
-          className="
-            w-full flex items-center justify-center gap-2
-            py-4 rounded-full font-bold text-base
-            bg-accent text-black
-            hover:bg-accent-hover hover:scale-[1.01]
-            disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100
-            transition-all duration-150
-          "
+          className="w-full flex items-center justify-center gap-2 py-4 rounded-full font-bold text-base bg-[#1DB954] text-black hover:bg-[#1ED760] hover:scale-[1.01] disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 transition-all duration-150"
         >
           {loading ? (
             <>
@@ -93,15 +95,13 @@ export default function DiscoverPage() {
           )}
         </button>
 
-        {/* Error */}
         {error && (
           <p className="mt-4 text-sm text-red-400 text-center">{error}</p>
         )}
 
-        {/* Skeleton preview */}
         {loading && (
           <div className="mt-10">
-            <p className="text-text-subdued text-sm mb-4 text-center animate-pulse">
+            <p className="text-[#6A6A6A] text-sm mb-4 text-center animate-pulse">
               Reasoning about your mood...
             </p>
             <SkeletonCards />

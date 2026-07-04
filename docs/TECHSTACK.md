@@ -173,7 +173,7 @@ in the deck (S8).
 
 ### Render free tier constraints
 - Spins down after 15 min inactivity (cold start ~30-60s)
-- 750 free hours/month (sufficient for a capstone demo)
+- 750 free hours/month (sufficient for prototype demos)
 - Automatic HTTPS
 
 ### Vercel free tier constraints  

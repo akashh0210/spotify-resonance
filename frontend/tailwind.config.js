@@ -11,7 +11,7 @@ module.exports = {
         'bg-card':       '#181818',
         'bg-card-hover': '#282828',
         'bg-elevated':   '#242424',
-        'bg-sidebar':    '#121212',
+        'bg-sidebar':    '#000000',
         'accent':        '#1DB954',
         'accent-hover':  '#1ED760',
         'text-primary':  '#FFFFFF',

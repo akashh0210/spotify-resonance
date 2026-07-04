@@ -1,17 +1,16 @@
 import Link from 'next/link'
-import { MessageSquare, Sparkles, SlidersHorizontal } from 'lucide-react'
+import { Play } from 'lucide-react'
 
-// ── Waveform equalizer (5 bars, CSS animation) ───────────────
 function Waveform() {
   const delays = ['0s', '0.15s', '0.30s', '0.20s', '0.10s']
   return (
-    <div className="flex items-end gap-1.5 h-12" aria-hidden>
+    <div className="flex items-end gap-1 h-14 flex-shrink-0" aria-hidden>
       {delays.map((delay, i) => (
         <div
           key={i}
-          className="w-1.5 bg-accent rounded-sm origin-bottom"
+          className="w-2 bg-[#1DB954] rounded-sm origin-bottom"
           style={{
-            height: '48px',
+            height: '56px',
             animation: `waveform 1.2s ease-in-out ${delay} infinite`,
           }}
         />
@@ -20,228 +19,125 @@ function Waveform() {
   )
 }
 
-// ── Mini bar chart (Section 2) ────────────────────────────────
-const THEMES = [
-  { label: 'Discovery friction',   count: 1104 },
-  { label: 'Love when it works',   count: 1025 },
-  { label: 'Autoplay/loop fatigue',count: 908  },
-  { label: 'No intent control',    count: 793  },
-  { label: 'Power user frustration', count: 453 },
-]
-const MAX_COUNT = Math.max(...THEMES.map(t => t.count))
+const FILTERS = ['All', 'Music', 'Podcasts']
 
-function ThemeChart() {
-  return (
-    <div className="space-y-3">
-      {THEMES.map(({ label, count }) => (
-        <div key={label}>
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-text-secondary text-sm">{label}</span>
-            <span className="text-text-subdued text-xs tabular-nums">{count.toLocaleString()}</span>
-          </div>
-          <div className="h-1.5 bg-[#282828] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-accent rounded-full"
-              style={{ width: `${(count / MAX_COUNT) * 100}%` }}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-// ── How it works steps ────────────────────────────────────────
-const HOW_STEPS = [
-  {
-    icon: MessageSquare,
-    title: 'Express intent',
-    desc: 'Describe what you want in your own words — "chill cooking vibes", "something like Anuv Jain but upbeat".',
-  },
-  {
-    icon: Sparkles,
-    title: 'AI reasons + explains',
-    desc: 'An LLM informed by 5,708 real reviews picks 8 tracks and explains each one with specific musical reasons.',
-  },
-  {
-    icon: SlidersHorizontal,
-    title: 'Control novelty',
-    desc: 'Dial from Comfort to Adventurous. You decide exactly how far to push away from the familiar.',
-  },
+const MADE_FOR_YOU = [
+  { title: 'Daily Mix 1',      desc: 'Anuv Jain, Prateek Kuhad, and more',         from: '#8d1532', to: '#e8115b' },
+  { title: 'Discover Weekly',  desc: 'Your weekly mixtape of fresh music',          from: '#1e3264', to: '#2d46b9' },
+  { title: 'Chill Hits',       desc: 'Kick back to the best new chill hits',        from: '#4286f4', to: '#86c7f3' },
+  { title: 'Release Radar',    desc: 'Catch all the latest from artists you follow',from: '#186037', to: '#1e3264' },
+  { title: 'Daily Mix 2',      desc: 'Coldplay, The Chainsmokers, and more',        from: '#b35400', to: '#e8a951' },
+  { title: 'Time Capsule',     desc: 'A personalized playlist from your past',      from: '#6d3a9e', to: '#c4a0e0' },
 ]
 
-// ── Why AI cards ──────────────────────────────────────────────
-const WHY_AI = [
-  {
-    title: 'Traditional recs fall short',
-    body: 'Collaborative filtering optimizes for the familiar. It can\'t parse "upbeat cooking vibes" or explain why it picked a song.',
-  },
-  {
-    title: 'What AI unlocks',
-    body: 'Natural language understanding, per-track reasoning, controllable novelty, and community intelligence from 5,708 real user voices.',
-  },
-  {
-    title: 'How the experience shifts',
-    body: 'From passive scroll-and-skip to an active discovery dialogue where every pick has a reason you can evaluate.',
-  },
+const POPULAR = [
+  { title: 'Aashiqui 2',        artist: 'Mithoon',           from: '#7b0000', to: '#e53935' },
+  { title: '45',                 artist: 'Anuv Jain',         from: '#6a5200', to: '#ffd740' },
+  { title: 'Zeher',              artist: 'Prateek Kuhad',     from: '#00695c', to: '#4db6ac' },
+  { title: 'Arijit Singh Hits',  artist: 'Arijit Singh',      from: '#4527a0', to: '#9575cd' },
+  { title: 'Raabta',             artist: 'Various Artists',   from: '#01579b', to: '#4fc3f7' },
+  { title: 'Bollywood Blast',    artist: 'Various Artists',   from: '#1b5e20', to: '#69f0ae' },
 ]
 
-// ── CTA button ────────────────────────────────────────────────
-function CTAButton({ className = '' }: { className?: string }) {
-  return (
-    <Link
-      href="/discover"
-      className={`inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-accent text-black font-bold text-base hover:bg-accent-hover hover:scale-[1.02] transition-all duration-150 ${className}`}
-    >
-      Start Discovering →
-    </Link>
-  )
-}
-
-export default function LandingPage() {
+export default function HomePage() {
   return (
     <div className="fade-in">
-
-      {/* ── SECTION 1: Hero ────────────────────────────────── */}
-      <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center px-6 py-16 max-w-4xl mx-auto">
-        <p className="text-[13px] uppercase tracking-[2px] text-text-subdued font-medium mb-5">
-          A Spotify feature concept · Growth PM Capstone
-        </p>
-
-        <h1 className="text-5xl md:text-7xl font-bold text-white leading-[1.05] mb-4">
-          Resonance
-        </h1>
-
-        <p className="text-accent text-xl md:text-2xl font-semibold mb-5 leading-snug">
-          Steerable music discovery, powered by community intelligence.
-        </p>
-
-        <p className="text-text-secondary text-base md:text-lg leading-relaxed max-w-xl mb-10">
-          Tell Spotify what you want in plain words. Get 8 tracks with explanations.
-          Control how far to push.
-        </p>
-
-        <CTAButton />
-
-        {/* Equalizer */}
-        <div className="mt-14">
-          <Waveform />
+      {/* Gradient header */}
+      <div
+        className="px-6 pt-8 pb-6"
+        style={{ background: 'linear-gradient(to bottom, rgba(29,185,84,0.18) 0%, #121212 100%)' }}
+      >
+        {/* Filter pills */}
+        <div className="flex gap-2 mb-8">
+          {FILTERS.map((f, i) => (
+            <button
+              key={f}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                i === 0
+                  ? 'bg-white text-black'
+                  : 'bg-[#2a2a2a] text-white hover:bg-[#3a3a3a]'
+              }`}
+            >
+              {f}
+            </button>
+          ))}
         </div>
-      </section>
 
-      {/* ── SECTION 2: The Problem ─────────────────────────── */}
-      <section className="px-6 py-20 border-t border-border-spotify">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-          <div>
-            <p className="text-[13px] uppercase tracking-[1px] text-text-subdued font-medium mb-4">
-              The Problem
-            </p>
-            <h2 className="text-3xl font-bold text-white mb-5 leading-tight">
-              The discovery problem
-            </h2>
-            <p className="text-text-secondary text-base leading-relaxed">
-              <span className="text-white font-semibold">69.4% of 5,708 user reviews</span> flag
-              discovery friction. Users want new music — but the algorithm keeps serving
-              the familiar. The frustration is widespread, consistent, and addressable.
-            </p>
-          </div>
-          <div>
-            <p className="text-[13px] uppercase tracking-[1px] text-text-subdued font-medium mb-4">
-              Top themes by mention count
-            </p>
-            <ThemeChart />
-          </div>
-        </div>
-      </section>
-
-      {/* ── SECTION 3: How it works ────────────────────────── */}
-      <section className="px-6 py-20 border-t border-border-spotify bg-[#0a0a0a]">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-[13px] uppercase tracking-[1px] text-text-subdued font-medium mb-4">
-            How it works
-          </p>
-          <h2 className="text-3xl font-bold text-white mb-10 leading-tight">
-            How Resonance works
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {HOW_STEPS.map(({ icon: Icon, title, desc }, i) => (
-              <div
-                key={title}
-                className="bg-bg-card rounded-lg p-5 hover:bg-[#282828] hover:-translate-y-0.5 transition-all duration-200"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                    <Icon size={16} className="text-accent" />
+        {/* NEW FEATURE: Resonance card */}
+        <Link href="/discover">
+          <div className="rounded-xl overflow-hidden cursor-pointer group mb-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 p-6 bg-gradient-to-r from-[#1a3d25] to-[#0d2218] hover:from-[#1e4a2b] hover:to-[#0f2a1e] transition-colors border border-[#1DB954]/20 hover:border-[#1DB954]/40 rounded-xl">
+              <Waveform />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-[#1DB954] text-black text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    New Feature
                   </span>
-                  <span className="text-[13px] font-medium text-text-subdued">Step {i + 1}</span>
+                  <span className="text-[#1DB954] font-semibold text-sm">Resonance</span>
                 </div>
-                <h3 className="text-white font-semibold text-base mb-2">{title}</h3>
-                <p className="text-text-secondary text-sm leading-relaxed">{desc}</p>
+                <h2 className="text-white font-bold text-xl sm:text-2xl mb-2 leading-tight">
+                  Describe your mood. Get explained picks.
+                </h2>
+                <p className="text-[#B3B3B3] text-sm leading-relaxed max-w-md">
+                  Tell Spotify what you want in plain words. An AI informed by 5,708 real reviews
+                  picks 8 tracks and explains each one — with a novelty dial you control.
+                </p>
               </div>
-            ))}
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#1DB954] flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Play size={18} fill="black" className="text-black ml-0.5" />
+              </div>
+            </div>
           </div>
+        </Link>
+      </div>
+
+      {/* Made For You */}
+      <section className="px-6 pb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-white">Made For You</h3>
+          <button className="text-[#B3B3B3] text-sm font-semibold hover:text-white transition-colors">
+            Show all
+          </button>
         </div>
-      </section>
-
-      {/* ── SECTION 4: Why AI ──────────────────────────────── */}
-      <section className="px-6 py-20 border-t border-border-spotify">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-[13px] uppercase tracking-[1px] text-text-subdued font-medium mb-4">
-            The solution
-          </p>
-          <h2 className="text-3xl font-bold text-white mb-10 leading-tight">
-            Why AI changes everything
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {WHY_AI.map(({ title, body }) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+          {MADE_FOR_YOU.map((item) => (
+            <div key={item.title} className="cursor-pointer group">
               <div
-                key={title}
-                className="bg-bg-card rounded-lg p-5 hover:bg-[#282828] hover:-translate-y-0.5 transition-all duration-200"
-              >
-                <h3 className="text-white font-semibold text-base mb-3">{title}</h3>
-                <p className="text-text-secondary text-sm leading-relaxed">{body}</p>
-              </div>
-            ))}
-          </div>
+                className="w-full aspect-square rounded-md mb-2 group-hover:opacity-90 transition-opacity"
+                style={{ background: `linear-gradient(135deg, ${item.from} 0%, ${item.to} 100%)` }}
+              />
+              <p className="text-white text-sm font-semibold truncate">{item.title}</p>
+              <p className="text-[#B3B3B3] text-xs truncate mt-0.5">{item.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ── SECTION 5: Community intelligence callout ──────── */}
-      <section className="px-6 py-20 border-t border-border-spotify bg-[#0a0a0a]">
-        <div className="max-w-4xl mx-auto">
-          <div className="border border-accent/30 bg-accent/5 rounded-xl px-8 py-10 text-center">
-            <p className="text-[13px] uppercase tracking-[1px] text-accent/70 font-medium mb-4">
-              Community intelligence
-            </p>
-            <p className="text-text-secondary text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Informed by{' '}
-              <span className="text-white font-semibold">5,708 real Spotify reviews</span>
-              {' '}across Google Play, App Store, Reddit, and the Spotify Community.
-              The agent knows what frustrates users and what makes discovery meaningful —
-              because it read their words.
-            </p>
-          </div>
+      {/* Popular albums */}
+      <section className="px-6 pb-10">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-white">Popular albums and singles</h3>
+          <button className="text-[#B3B3B3] text-sm font-semibold hover:text-white transition-colors">
+            Show all
+          </button>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+          {POPULAR.map((item) => (
+            <div key={item.title} className="cursor-pointer group">
+              <div
+                className="w-full aspect-square rounded-md mb-2 group-hover:opacity-90 transition-opacity"
+                style={{ background: `linear-gradient(135deg, ${item.from} 0%, ${item.to} 100%)` }}
+              />
+              <p className="text-white text-sm font-semibold truncate">{item.title}</p>
+              <p className="text-[#B3B3B3] text-xs truncate mt-0.5">{item.artist}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ── SECTION 6: CTA repeat ──────────────────────────── */}
-      <section className="px-6 py-24 border-t border-border-spotify text-center">
-        <div className="max-w-xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to discover?
-          </h2>
-          <p className="text-text-secondary text-base mb-8 leading-relaxed">
-            Type your mood. Get 8 tracks with real explanations. Dial up the novelty.
-          </p>
-          <CTAButton />
-          <p className="mt-8 text-text-subdued text-sm">
-            Built as a Growth PM capstone prototype. Not affiliated with Spotify.
-          </p>
-        </div>
-      </section>
-
+      <div className="px-6 pb-8 text-center">
+        <p className="text-[#6A6A6A] text-xs">Prototype · Not affiliated with Spotify</p>
+      </div>
     </div>
   )
 }

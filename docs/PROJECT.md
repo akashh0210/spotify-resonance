@@ -7,8 +7,7 @@
 ## 1. What this is
 
 Resonance is an AI-native music discovery agent built as a **feature
-prototype inside a pixel-accurate Spotify shell**. It is Part 4 of a
-Growth PM capstone. It demonstrates why AI is uniquely suited to solving
+prototype inside a pixel-accurate Spotify shell**. It demonstrates why AI is uniquely suited to solving
 the discovery problem that collaborative filtering cannot.
 
 The PS requires the MVP to demonstrate three things:
